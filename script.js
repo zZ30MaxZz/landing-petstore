@@ -1,82 +1,174 @@
-// Three.js escena mejorada
-let scene, camera, renderer, particles;
+// Import THREE as ES module
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
 
-function init() {
-    // Crear escena
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000);
+let scene;
+let camera;
+let renderer;
+let particles;
 
-    // Cámara
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 30;
+let mouseX = 0;
+let mouseY = 0;
 
-    // Renderer
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.getElementById('threejs-container').appendChild(renderer.domElement);
+// Inicializar
+function init(){
 
-    // Luz ambiental
-    const ambientLight = new THREE.AmbientLight(0x404040, 2);
-    scene.add(ambientLight);
+ // Escena
+ scene = new THREE.Scene();
 
-    // Luz direccional
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(5, 5, 5);
-    scene.add(directionalLight);
+// Cámara
+ camera = new THREE.PerspectiveCamera(
+ 75,
+ window.innerWidth / window.innerHeight,
+ 0.1,
+ 1000
+ );
 
-    // Crear partículas flotantes (como en ChaingPT)
-    createParticles();
+ camera.position.z = 30;
 
-    // Animar
-    animate();
+// Renderer
+ renderer = new THREE.WebGLRenderer({
+ antialias:true,
+ alpha:true
+ });
 
-    // Manejar redimensionamiento
-    window.addEventListener('resize', onWindowResize, false);
+ renderer.setSize(
+ window.innerWidth,
+ window.innerHeight
+ );
+
+ renderer.setPixelRatio(
+ Math.min(window.devicePixelRatio,2)
+ );
+
+ renderer.setClearColor(0x000000, 1);
+
+ document
+ .getElementById('threejs-container')
+ .appendChild(renderer.domElement);
+
+// Luces
+ const ambientLight = new THREE.AmbientLight(
+ 0xffffff,
+ 1.2
+ );
+
+ scene.add(ambientLight);
+
+ const directionalLight =
+ new THREE.DirectionalLight(
+ 0xffffff,
+ 1
+ );
+
+ directionalLight.position.set(5,5,5);
+
+ scene.add(directionalLight);
+
+// Crear partículas
+ createParticles();
+
+// Eventos
+ window.addEventListener(
+ 'resize',
+ onWindowResize
+ );
+
+ document.addEventListener(
+ 'mousemove',
+ onMouseMove
+ );
+
+ // Animación
+ animate();
 }
 
-function createParticles() {
-    // Geometría para partículas
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 1500;
+// Partículas
+function createParticles(){
 
-    const posArray = new Float32Array(particlesCount * 3);
+ const geometry =
+ new THREE.BufferGeometry();
 
-    for (let i = 0; i < particlesCount * 3; i++) {
-        // Posiciones aleatorias en un espacio 3D
-        posArray[i] = (Math.random() - 0.5) * 100;
-    }
+ const particlesCount = 2500;
 
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+ const positions =
+ new Float32Array(
+ particlesCount * 3
+ );
 
-    // Material de partículas
-    const particlesMaterial = new THREE.PointsMaterial({
-        size: 0.005,
-        color: 0x4fc3f7,
-        transparent: true,
-        opacity: 0.6
-    });
+ for(let i = 0; i < particlesCount * 3; i++){
 
-    // Crear el sistema de partículas
-    particles = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particles);
+ positions[i] =
+ (Math.random() - 0.5) * 120;
+ }
+
+ geometry.setAttribute(
+ 'position',
+ new THREE.BufferAttribute(
+ positions,
+ 3
+ )
+ );
+
+ const material =
+ new THREE.PointsMaterial({
+ size:0.18,
+ color:0x4fc3f7,
+ transparent:true,
+ opacity:0.8,
+ blending:THREE.AdditiveBlending
+ });
+
+ particles =
+ new THREE.Points(
+ geometry,
+ material
+ );
+
+ scene.add(particles);
 }
 
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+// Mouse
+function onMouseMove(event){
+
+ mouseX =
+ (event.clientX - window.innerWidth / 2) * 0.0005;
+
+ mouseY =
+ (event.clientY - window.innerHeight / 2) * 0.0005;
 }
 
-function animate() {
-    requestAnimationFrame(animate);
+// Resize
+function onWindowResize(){
 
-    // Rotar ligeramente las partículas
-    if (particles) {
-        particles.rotation.y += 0.0005;
-    }
+ camera.aspect =
+ window.innerWidth / window.innerHeight;
 
-    renderer.render(scene, camera);
+ camera.updateProjectionMatrix();
+
+ renderer.setSize(
+ window.innerWidth,
+ window.innerHeight
+ );
 }
 
-// Inicializar cuando cargue la página
-window.addEventListener('load', init);
+// Animación
+function animate(){
+
+ requestAnimationFrame(animate);
+
+ if(particles){
+
+ particles.rotation.y += 0.001;
+ particles.rotation.x += 0.0003;
+
+ particles.rotation.y += mouseX;
+ particles.rotation.x += mouseY;
+ }
+
+ renderer.render(scene, camera);
+}
+
+// Esperar carga
+window.addEventListener('load', () => {
+ init();
+});

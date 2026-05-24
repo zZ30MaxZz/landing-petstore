@@ -19,14 +19,11 @@ const clock = new THREE.Clock();
 // ======================================================
 
 function init() {
-  // Escena
   scene = new THREE.Scene();
 
-  // Cámara
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 30;
 
-  // Renderer
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -41,17 +38,12 @@ function init() {
   directionalLight.position.set(5, 5, 5);
   scene.add(directionalLight);
 
-  // Partículas
   createParticles();
-
-  // Animales
   createAnimals();
 
-  // Eventos
   window.addEventListener('resize', onWindowResize);
   document.addEventListener('mousemove', onMouseMove);
 
-  // Start
   animate();
 }
 
@@ -83,68 +75,180 @@ function createParticles() {
 }
 
 // ======================================================
-// PECES
+// PECES MEJORADOS
 // ======================================================
 
 function createFish() {
   const group = new THREE.Group();
 
-  // Cuerpo del pez (cono)
-  const bodyGeometry = new THREE.ConeGeometry(0.5, 2, 8);
+  // Cuerpo del pez - forma más orgánica usando Sphere escalado
+  const bodyGeometry = new THREE.SphereGeometry(0.8, 16, 12);
+  bodyGeometry.scale(1.8, 0.6, 0.4);
+  
   const bodyMaterial = new THREE.MeshStandardMaterial({
-    color: 0x00ffff,
-    emissive: 0x0077aa,
-    emissiveIntensity: 0.8
+    color: 0xff6b35,
+    emissive: 0xff3300,
+    emissiveIntensity: 0.3,
+    metalness: 0.3,
+    roughness: 0.4
   });
   const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-  body.rotation.z = Math.PI / 2;
+  body.name = 'body';
   group.add(body);
 
-  // Cola
-  const tailGeometry = new THREE.BoxGeometry(0.7, 0.5, 0.1);
-  const tail = new THREE.Mesh(tailGeometry, bodyMaterial);
-  tail.position.x = -1.1;
+  // Cola del pez
+  const tailShape = new THREE.Shape();
+  tailShape.moveTo(0, 0);
+  tailShape.lineTo(-0.8, 0.6);
+  tailShape.lineTo(-0.8, -0.6);
+  tailShape.lineTo(0, 0);
+  
+  const tailGeometry = new THREE.ShapeGeometry(tailShape);
+  const tailMaterial = new THREE.MeshStandardMaterial({
+    color: 0xff8c42,
+    side: THREE.DoubleSide,
+    emissive: 0xff5500,
+    emissiveIntensity: 0.2
+  });
+  const tail = new THREE.Mesh(tailGeometry, tailMaterial);
+  tail.position.x = -1.4;
+  tail.name = 'tail';
   group.add(tail);
+
+  // Aleta dorsal
+  const dorsalShape = new THREE.Shape();
+  dorsalShape.moveTo(0, 0);
+  dorsalShape.lineTo(-0.3, 0.7);
+  dorsalShape.lineTo(-0.6, 0);
+  dorsalShape.lineTo(0, 0);
+  
+  const dorsalGeometry = new THREE.ShapeGeometry(dorsalShape);
+  const dorsalMaterial = new THREE.MeshStandardMaterial({
+    color: 0xff6b35,
+    side: THREE.DoubleSide,
+    emissive: 0xff3300,
+    emissiveIntensity: 0.2
+  });
+  const dorsal = new THREE.Mesh(dorsalGeometry, dorsalMaterial);
+  dorsal.position.set(0, 0.5, 0);
+  dorsal.name = 'dorsal';
+  group.add(dorsal);
+
+  // Ojo
+  const eyeGeometry = new THREE.SphereGeometry(0.15, 8, 8);
+  const eyeMaterial = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    emissive: 0xffffff,
+    emissiveIntensity: 0.5
+  });
+  const eye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+  eye.position.set(1.0, 0.1, 0.25);
+  group.add(eye);
+
+  // Pupila
+  const pupilGeometry = new THREE.SphereGeometry(0.08, 8, 8);
+  const pupilMaterial = new THREE.MeshStandardMaterial({
+    color: 0x000000,
+    emissive: 0x000000,
+    emissiveIntensity: 1
+  });
+  const pupil = new THREE.Mesh(pupilGeometry, pupilMaterial);
+  pupil.position.set(1.1, 0.1, 0.3);
+  group.add(pupil);
 
   return group;
 }
 
 // ======================================================
-// MARIPOSA
+// MARIPOSA MEJORADA
 // ======================================================
 
 function createButterfly() {
   const group = new THREE.Group();
 
-  const wingGeometry = new THREE.PlaneGeometry(1, 1.3);
+  // Ala izquierda - forma de mariposa
+  const leftWingShape = new THREE.Shape();
+  leftWingShape.moveTo(0, 0);
+  leftWingShape.bezierCurveTo(0.3, 0.8, 1.2, 1.0, 1.4, 0.5);
+  leftWingShape.bezierCurveTo(1.5, 0, 1.2, -0.8, 0.8, -1.0);
+  leftWingShape.bezierCurveTo(0.4, -0.8, 0, -0.3, 0, 0);
+
   const wingMaterial = new THREE.MeshStandardMaterial({
-    color: 0xff66ff,
+    color: 0x9c27b0,
     side: THREE.DoubleSide,
-    emissive: 0x551155,
-    emissiveIntensity: 1
+    emissive: 0x4a148c,
+    emissiveIntensity: 0.4,
+    metalness: 0.1,
+    roughness: 0.3
   });
 
-  // Ala izquierda
-  const leftWing = new THREE.Mesh(wingGeometry, wingMaterial);
-  leftWing.position.x = -0.5;
+  const leftWingGeometry = new THREE.ShapeGeometry(leftWingShape);
+  const leftWing = new THREE.Mesh(leftWingGeometry, wingMaterial);
+  leftWing.position.x = -0.1;
+  leftWing.rotation.y = -0.2;
   leftWing.name = 'leftWing';
   group.add(leftWing);
 
-  // Ala derecha
-  const rightWing = new THREE.Mesh(wingGeometry, wingMaterial);
-  rightWing.position.x = 0.5;
+  // Ala derecha - espejo
+  const rightWingGeometry = new THREE.ShapeGeometry(leftWingShape);
+  const rightWing = new THREE.Mesh(rightWingGeometry, wingMaterial);
+  rightWing.scale.x = -1;
+  rightWing.position.x = 0.1;
+  rightWing.rotation.y = 0.2;
   rightWing.name = 'rightWing';
   group.add(rightWing);
 
-  // Cuerpo
-  const bodyGeometry = new THREE.CylinderGeometry(0.08, 0.08, 1.4);
+  // Patrón en alas (manchas naranjas)
+  const spotMaterial = new THREE.MeshStandardMaterial({
+    color: 0xff9800,
+    side: THREE.DoubleSide,
+    emissive: 0xff6600,
+    emissiveIntensity: 0.5
+  });
+
+  const spotGeometry = new THREE.CircleGeometry(0.15, 16);
+  
+  const spot1 = new THREE.Mesh(spotGeometry, spotMaterial);
+  spot1.position.set(-0.7, 0.3, 0.01);
+  spot1.name = 'spot1';
+  group.add(spot1);
+
+  const spot2 = new THREE.Mesh(spotGeometry, spotMaterial);
+  spot2.position.set(0.7, 0.3, 0.01);
+  spot2.name = 'spot2';
+  group.add(spot2);
+
+  // Cuerpo de la mariposa
+  const bodyGeometry = new THREE.CapsuleGeometry(0.08, 0.8, 4, 8);
   const bodyMaterial = new THREE.MeshStandardMaterial({
-    color: 0xffffff,
-    emissive: 0x444444
+    color: 0x212121,
+    emissive: 0x000000,
+    emissiveIntensity: 0.1
   });
   const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
   body.rotation.z = Math.PI / 2;
+  body.name = 'body';
   group.add(body);
+
+  // Cabeza
+  const headGeometry = new THREE.SphereGeometry(0.12, 12, 12);
+  const head = new THREE.Mesh(headGeometry, bodyMaterial);
+  head.position.x = 0.5;
+  group.add(head);
+
+  // Antenas
+  const antennaMaterial = new THREE.MeshStandardMaterial({ color: 0x212121 });
+  
+  const antenna1Geometry = new THREE.CylinderGeometry(0.01, 0.01, 0.5, 8);
+  const antenna1 = new THREE.Mesh(antenna1Geometry, antennaMaterial);
+  antenna1.position.set(0.5, 0.15, 0);
+  antenna1.rotation.z = -0.5;
+  group.add(antenna1);
+
+  const antenna2 = new THREE.Mesh(antenna1Geometry, antennaMaterial);
+  antenna2.position.set(0.5, -0.15, 0);
+  antenna2.rotation.z = 0.5;
+  group.add(antenna2);
 
   return group;
 }
@@ -179,19 +283,11 @@ function createAnimals() {
       (Math.random() - 0.5) * 30,
       (Math.random() - 0.5) * 20
     );
-
-    // Buscar alas por nombre
-    const leftWing = butterfly.getObjectByName('leftWing');
-    const rightWing = butterfly.getObjectByName('rightWing');
-
     butterfly.userData = {
       speed: 0.1 + Math.random() * 0.2,
       offset: Math.random() * Math.PI * 2,
-      type: 'butterfly',
-      leftWing: leftWing,
-      rightWing: rightWing
+      type: 'butterfly'
     };
-
     animalGroup.push(butterfly);
     scene.add(butterfly);
   }
@@ -231,7 +327,6 @@ function animate() {
   // Animales
   animalGroup.forEach((animal, index) => {
     const data = animal.userData;
-
     if (!data || !data.type) return;
 
     // Movimiento flotante
@@ -242,21 +337,27 @@ function animate() {
     // Rotación suave
     animal.rotation.y = Math.sin(elapsed + index) * 0.4;
 
-    // Peces
+    // Peces - animación de cola
     if (data.type === 'fish') {
-      animal.rotation.z = Math.sin(elapsed * 4 + data.offset) * 0.15;
+      const tail = animal.getObjectByName('tail');
+      if (tail) {
+        tail.rotation.z = Math.sin(elapsed * 8 + data.offset) * 0.4;
+      }
     }
 
-    // Mariposas
+    // Mariposas - aleteo de alas
     if (data.type === 'butterfly') {
-      const flap = Math.sin(elapsed * 10 + data.offset) * 0.7;
-
-      // Usar getObjectByName para mayor seguridad
-      const lWing = animal.getObjectByName('leftWing');
-      const rWing = animal.getObjectByName('rightWing');
-
-      if (lWing) lWing.rotation.y = flap;
-      if (rWing) rWing.rotation.y = -flap;
+      const flap = Math.sin(elapsed * 10 + data.offset) * 0.5;
+      
+      const leftWing = animal.getObjectByName('leftWing');
+      const rightWing = animal.getObjectByName('rightWing');
+      
+      if (leftWing) {
+        leftWing.rotation.y = -0.2 + flap;
+      }
+      if (rightWing) {
+        rightWing.rotation.y = 0.2 - flap;
+      }
     }
 
     // Reacción al mouse

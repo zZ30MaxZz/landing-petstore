@@ -85,8 +85,6 @@ function init() {
 
  // ======================================================
  // ANIMALES
- // Inspirado en ejemplos de flocking / birds de la
- // comunidad Three.js
  // ======================================================
 
  createAnimals();
@@ -201,10 +199,16 @@ function createAnimals() {
  (Math.random() - 0.5) * 20
  );
 
+ // Guardar referencias de las alas en children
+ const leftWing = butterfly.children[0];
+ const rightWing = butterfly.children[1];
+
  butterfly.userData = {
  speed: 0.1 + Math.random() * 0.2,
  offset: Math.random() * Math.PI * 2,
- type: 'butterfly'
+ type: 'butterfly',
+ leftWing: leftWing,
+ rightWing: rightWing
  };
 
  animalGroup.push(butterfly);
@@ -326,11 +330,6 @@ function createButterfly() {
 
  group.add(body);
 
- group.userData = {
- leftWing,
- rightWing
- };
-
  return group;
 }
 
@@ -401,6 +400,8 @@ function animate() {
 
  const data = animal.userData;
 
+ if (!data) return;
+
  // Movimiento flotante
 
  animal.position.x +=
@@ -418,6 +419,7 @@ function animate() {
  Math.sin(elapsed + index) * 0.4;
 
  // Peces
+
  if (data.type === 'fish') {
 
  animal.rotation.z =
@@ -431,9 +433,13 @@ function animate() {
  const flap =
  Math.sin(elapsed * 10 + data.offset) * 0.7;
 
- animal.userData.leftWing.rotation.y = flap;
+ if (data.leftWing) {
+  data.leftWing.rotation.y = flap;
+ }
 
- animal.userData.rightWing.rotation.y = -flap;
+ if (data.rightWing) {
+  data.rightWing.rotation.y = -flap;
+ }
  }
 
  // Reacción al mouse

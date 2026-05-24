@@ -1,75 +1,1563 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>PetStore - Tienda para Mascotas</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Clínica veterinaria moderna con medicina preventiva, cirugía, odontología, peluquería, spa y atención integral para mascotas."
+  />
+  <title>VetCare Clínica Veterinaria | Cuidado integral para mascotas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
 
- <link rel="stylesheet" href="style.css">
+  <style>
+    /* =========================
+       Variables y base
+    ========================= */
+    :root {
+      --color-primary: #2e8b57;
+      --color-primary-dark: #20633f;
+      --color-primary-soft: #98fb98;
+      --color-accent: #f4b860;
+      --color-white: #ffffff;
+      --color-ink: #1f2933;
+      --color-muted: #5f6c7b;
+      --color-light: #f6f8f7;
+      --color-border: #dfe7e2;
+      --shadow-soft: 0 16px 40px rgba(31, 41, 51, 0.1);
+      --radius: 8px;
+      --radius-lg: 14px;
+      --container: 1180px;
+      --space-1: 0.5rem;
+      --space-2: 0.75rem;
+      --space-3: 1rem;
+      --space-4: 1.5rem;
+      --space-5: 2rem;
+      --space-6: 3rem;
+      --space-7: 4.5rem;
+      --transition: 180ms ease;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--color-ink);
+      background: var(--color-white);
+      line-height: 1.6;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .container {
+      width: min(100% - 2rem, var(--container));
+      margin-inline: auto;
+    }
+
+    .section {
+      padding: var(--space-7) 0;
+    }
+
+    .section--soft {
+      background: var(--color-light);
+    }
+
+    .section__eyebrow {
+      margin: 0 0 var(--space-1);
+      color: var(--color-primary);
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .section__title {
+      margin: 0;
+      color: var(--color-ink);
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.1;
+    }
+
+    .section__intro {
+      max-width: 680px;
+      margin: var(--space-3) 0 0;
+      color: var(--color-muted);
+      font-size: 1.05rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: var(--space-4);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0.8rem 1.25rem;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      font-weight: 800;
+      line-height: 1;
+      transition: transform var(--transition), background var(--transition), border-color var(--transition), color var(--transition), box-shadow var(--transition);
+    }
+
+    .btn:focus-visible,
+    .nav__link:focus-visible,
+    .faq__trigger:focus-visible,
+    .carousel__button:focus-visible,
+    .social-link:focus-visible,
+    .service-card__link:focus-visible {
+      outline: 3px solid rgba(244, 184, 96, 0.75);
+      outline-offset: 3px;
+    }
+
+    .btn--primary {
+      color: var(--color-white);
+      background: var(--color-primary);
+      box-shadow: 0 12px 22px rgba(46, 139, 87, 0.24);
+    }
+
+    .btn--primary:hover {
+      background: var(--color-primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn--secondary {
+      color: var(--color-primary-dark);
+      background: var(--color-white);
+      border-color: rgba(46, 139, 87, 0.28);
+    }
+
+    .btn--secondary:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-2px);
+    }
+
+    .icon {
+      width: 1.45rem;
+      height: 1.45rem;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    /* =========================
+       Header y navegación
+    ========================= */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      border-bottom: 1px solid rgba(223, 231, 226, 0.72);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 72px;
+      gap: var(--space-3);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--color-primary-dark);
+    }
+
+    .brand__mark {
+      display: inline-grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      color: var(--color-white);
+      background: var(--color-primary);
+      border-radius: 50%;
+    }
+
+    .nav__toggle {
+      display: inline-grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      color: var(--color-ink);
+      background: var(--color-light);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+    }
+
+    .nav__menu {
+      position: absolute;
+      top: 72px;
+      left: 0;
+      right: 0;
+      display: grid;
+      gap: 0.25rem;
+      margin: 0;
+      padding: var(--space-3);
+      list-style: none;
+      background: var(--color-white);
+      border-bottom: 1px solid var(--color-border);
+      box-shadow: var(--shadow-soft);
+      transform: translateY(-120%);
+      visibility: hidden;
+      opacity: 0;
+      transition: transform var(--transition), opacity var(--transition), visibility var(--transition);
+    }
+
+    .nav__menu.is-open {
+      transform: translateY(0);
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .nav__link {
+      display: block;
+      padding: 0.8rem 1rem;
+      border-radius: var(--radius);
+      color: var(--color-ink);
+      font-weight: 700;
+      transition: color var(--transition), background var(--transition);
+    }
+
+    .nav__link:hover {
+      color: var(--color-primary-dark);
+      background: var(--color-light);
+    }
+
+    /* =========================
+       Hero
+    ========================= */
+    .hero {
+      position: relative;
+      min-height: calc(100vh - 72px);
+      display: grid;
+      align-items: center;
+      overflow: hidden;
+      color: var(--color-white);
+      background:
+        linear-gradient(90deg, rgba(23, 69, 48, 0.92) 0%, rgba(23, 69, 48, 0.72) 52%, rgba(23, 69, 48, 0.3) 100%),
+        url("https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 80px;
+      background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.94));
+      pointer-events: none;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      padding: var(--space-7) 0 calc(var(--space-7) + 1rem);
+    }
+
+    .hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      margin-bottom: var(--space-4);
+      padding: 0.5rem 0.75rem;
+      color: #143324;
+      background: rgba(152, 251, 152, 0.92);
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(2.6rem, 10vw, 5.8rem);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      max-width: 640px;
+      margin: var(--space-4) 0 0;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      margin-top: var(--space-5);
+    }
+
+    .hero__actions .btn--secondary {
+      color: var(--color-white);
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero__actions .btn--secondary:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    /* =========================
+       Sobre nosotros
+    ========================= */
+    .about__layout {
+      display: grid;
+      gap: var(--space-5);
+      align-items: center;
+    }
+
+    .about__media {
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .about__media img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+    }
+
+    .about__list {
+      display: grid;
+      gap: var(--space-3);
+      margin-top: var(--space-5);
+    }
+
+    .about-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: var(--space-3);
+      padding: var(--space-4);
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+    }
+
+    .about-item__icon {
+      display: inline-grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      color: var(--color-primary-dark);
+      background: #e9f9ed;
+      border-radius: 50%;
+    }
+
+    .about-item h3,
+    .about-item p {
+      margin: 0;
+    }
+
+    .about-item p {
+      color: var(--color-muted);
+    }
+
+    /* =========================
+       Servicios
+    ========================= */
+    .services__grid {
+      margin-top: var(--space-5);
+      grid-template-columns: 1fr;
+    }
+
+    .service-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      padding: var(--space-4);
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(46, 139, 87, 0.35);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .service-card__icon {
+      display: inline-grid;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      margin-bottom: var(--space-4);
+      color: var(--color-primary-dark);
+      background: linear-gradient(135deg, #e9f9ed, #d8ffd8);
+      border-radius: 50%;
+    }
+
+    .service-card h3 {
+      margin: 0 0 var(--space-2);
+      font-size: 1.2rem;
+    }
+
+    .service-card p {
+      margin: 0;
+      color: var(--color-muted);
+    }
+
+    .service-card__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      width: fit-content;
+      margin-top: auto;
+      padding-top: var(--space-4);
+      color: var(--color-primary-dark);
+      font-weight: 800;
+      transition: gap var(--transition), color var(--transition);
+    }
+
+    .service-card__link:hover {
+      gap: 0.55rem;
+      color: var(--color-primary);
+    }
+
+    /* =========================
+       Equipo
+    ========================= */
+    .team__grid {
+      margin-top: var(--space-5);
+      grid-template-columns: 1fr;
+    }
+
+    .team-card {
+      overflow: hidden;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .team-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .team-card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      background: var(--color-light);
+    }
+
+    .team-card__body {
+      padding: var(--space-4);
+    }
+
+    .team-card h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .team-card__role {
+      margin: 0.25rem 0 var(--space-2);
+      color: var(--color-primary-dark);
+      font-weight: 800;
+    }
+
+    .team-card p:last-child {
+      margin: 0;
+      color: var(--color-muted);
+    }
+
+    /* =========================
+       Testimonios
+    ========================= */
+    .testimonials__shell {
+      position: relative;
+      margin-top: var(--space-5);
+      overflow: hidden;
+    }
+
+    .carousel {
+      display: flex;
+      transition: transform 320ms ease;
+    }
+
+    .testimonial {
+      flex: 0 0 100%;
+      padding: 0.25rem;
+    }
+
+    .testimonial__inner {
+      min-height: 100%;
+      padding: var(--space-5);
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 30px rgba(31, 41, 51, 0.06);
+    }
+
+    .testimonial__header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+    }
+
+    .testimonial__header img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .testimonial h3,
+    .testimonial p {
+      margin: 0;
+    }
+
+    .testimonial blockquote {
+      margin: 0;
+      color: var(--color-muted);
+      font-size: 1.05rem;
+    }
+
+    .stars {
+      color: #d99019;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+    }
+
+    .carousel__controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      margin-top: var(--space-4);
+    }
+
+    .carousel__button {
+      display: inline-grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      color: var(--color-primary-dark);
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: 50%;
+      transition: background var(--transition), border-color var(--transition), transform var(--transition);
+    }
+
+    .carousel__button:hover {
+      background: #e9f9ed;
+      border-color: var(--color-primary);
+      transform: translateY(-2px);
+    }
+
+    .carousel__dots {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .carousel__dot {
+      width: 10px;
+      height: 10px;
+      padding: 0;
+      background: #b7c8bd;
+      border: 0;
+      border-radius: 999px;
+      transition: width var(--transition), background var(--transition);
+    }
+
+    .carousel__dot[aria-current="true"] {
+      width: 28px;
+      background: var(--color-primary);
+    }
+
+    /* =========================
+       FAQ
+    ========================= */
+    .faq__list {
+      display: grid;
+      gap: var(--space-3);
+      margin-top: var(--space-5);
+    }
+
+    .faq__item {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+    }
+
+    .faq__trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: var(--space-3);
+      padding: var(--space-4);
+      color: var(--color-ink);
+      background: transparent;
+      border: 0;
+      text-align: left;
+      font-weight: 800;
+    }
+
+    .faq__icon {
+      flex: 0 0 auto;
+      transition: transform var(--transition);
+    }
+
+    .faq__trigger[aria-expanded="true"] .faq__icon {
+      transform: rotate(45deg);
+    }
+
+    .faq__panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows var(--transition);
+    }
+
+    .faq__panel.is-open {
+      grid-template-rows: 1fr;
+    }
+
+    .faq__panel-inner {
+      overflow: hidden;
+    }
+
+    .faq__panel p {
+      margin: 0;
+      padding: 0 var(--space-4) var(--space-4);
+      color: var(--color-muted);
+    }
+
+    /* =========================
+       Contacto
+    ========================= */
+    .contact__layout {
+      display: grid;
+      gap: var(--space-5);
+      align-items: start;
+      margin-top: var(--space-5);
+    }
+
+    .contact-card,
+    .contact-form {
+      padding: var(--space-5);
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 30px rgba(31, 41, 51, 0.06);
+    }
+
+    .contact-card h3,
+    .contact-card p {
+      margin-top: 0;
+    }
+
+    .contact-card p {
+      color: var(--color-muted);
+    }
+
+    .contact-list {
+      display: grid;
+      gap: var(--space-3);
+      margin: var(--space-4) 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .contact-list li {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: var(--space-2);
+      align-items: start;
+      color: var(--color-muted);
+    }
+
+    .contact-list strong {
+      color: var(--color-ink);
+    }
+
+    .form-grid {
+      display: grid;
+      gap: var(--space-3);
+    }
+
+    .form-field {
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .form-field label {
+      font-weight: 800;
+      color: var(--color-ink);
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      padding: 0.85rem 0.9rem;
+      color: var(--color-ink);
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 4px rgba(46, 139, 87, 0.12);
+    }
+
+    .form-field textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .form-error {
+      min-height: 1.2rem;
+      color: #b42318;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .form-status {
+      margin: var(--space-3) 0 0;
+      color: var(--color-primary-dark);
+      font-weight: 800;
+    }
+
+    /* =========================
+       Footer
+    ========================= */
+    .site-footer {
+      padding: var(--space-6) 0 var(--space-4);
+      color: rgba(255, 255, 255, 0.86);
+      background: #173f2d;
+    }
+
+    .footer__grid {
+      display: grid;
+      gap: var(--space-5);
+    }
+
+    .footer__title {
+      margin: 0 0 var(--space-2);
+      color: var(--color-white);
+      font-size: 1.15rem;
+    }
+
+    .footer__text,
+    .footer__list {
+      margin: 0;
+    }
+
+    .footer__list {
+      display: grid;
+      gap: 0.45rem;
+      padding: 0;
+      list-style: none;
+    }
+
+    .socials {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: var(--space-3);
+    }
+
+    .social-link {
+      display: inline-grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      color: var(--color-white);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transition: background var(--transition), transform var(--transition);
+    }
+
+    .social-link:hover {
+      background: rgba(152, 251, 152, 0.22);
+      transform: translateY(-2px);
+    }
+
+    .footer__bottom {
+      margin-top: var(--space-5);
+      padding-top: var(--space-4);
+      border-top: 1px solid rgba(255, 255, 255, 0.16);
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    /* =========================
+       Breakpoints
+    ========================= */
+    @media (min-width: 640px) {
+      .services__grid,
+      .team__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .form-field--full {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .section {
+        padding: 5.5rem 0;
+      }
+
+      .testimonial {
+        flex-basis: 50%;
+      }
+
+      .footer__grid {
+        grid-template-columns: 1.4fr 1fr 1fr;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .nav__toggle {
+        display: none;
+      }
+
+      .nav__menu {
+        position: static;
+        display: flex;
+        align-items: center;
+        gap: 0.1rem;
+        padding: 0;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        transform: none;
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .nav__link {
+        padding: 0.65rem 0.8rem;
+      }
+
+      .about__layout,
+      .contact__layout {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .services__grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .team__grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .testimonial {
+        flex-basis: 33.3333%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <!-- Header con navegación responsive -->
+  <header class="site-header">
+    <nav class="nav container" aria-label="Navegación principal">
+      <a class="brand" href="#inicio" aria-label="VetCare inicio">
+        <span class="brand__mark" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10Z"/></svg>
+        </span>
+        VetCare
+      </a>
 
- <!-- Fondo Three.js -->
- <div id="threejs-container"></div>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
 
- <!-- Contenido -->
- <div class="content-overlay">
+      <ul class="nav__menu" id="nav-menu">
+        <li><a class="nav__link" href="#sobre-nosotros">Sobre nosotros</a></li>
+        <li><a class="nav__link" href="#servicios">Servicios</a></li>
+        <li><a class="nav__link" href="#equipo">Equipo</a></li>
+        <li><a class="nav__link" href="#testimonios">Testimonios</a></li>
+        <li><a class="nav__link" href="#faq">FAQ</a></li>
+        <li><a class="nav__link" href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
 
- <header>
- <h1>PetStore</h1>
- <p>Todo lo que tu mascota necesita</p>
- </header>
+  <main>
+    <!-- Hero principal -->
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero__content">
+          <span class="hero__badge">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            Atención veterinaria integral
+          </span>
+          <h1 id="hero-title">Cuidamos a tu mascota como parte de la familia</h1>
+          <p>
+            Medicina preventiva, diagnóstico, cirugía, odontología y bienestar en un solo lugar,
+            con atención cercana y tecnología moderna.
+          </p>
+          <div class="hero__actions">
+            <a class="btn btn--primary" href="#contacto">Solicitar cita</a>
+            <a class="btn btn--secondary" href="#servicios">Ver servicios</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
- <nav>
- <ul>
- <li><a href="#alimentacion">Alimentación</a></li>
- <li><a href="#juguetes">Juguetes</a></li>
- <li><a href="#accesorios">Accesorios</a></li>
- <li><a href="#salud">Salud</a></li>
- </ul>
- </nav>
+    <!-- Sobre nosotros -->
+    <section class="section section--soft" id="sobre-nosotros" aria-labelledby="about-title">
+      <div class="container about__layout">
+        <div>
+          <p class="section__eyebrow">Sobre nosotros</p>
+          <h2 class="section__title" id="about-title">Bienestar animal con ciencia, respeto y calidez</h2>
+          <p class="section__intro">
+            En VetCare combinamos experiencia clínica, prevención y acompañamiento familiar para
+            que cada mascota reciba una atención segura, clara y personalizada.
+          </p>
 
- <main>
+          <div class="about__list" aria-label="Misión, visión y valores">
+            <article class="about-item">
+              <span class="about-item__icon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="8"/></svg>
+              </span>
+              <div>
+                <h3>Misión</h3>
+                <p>Proteger la salud de las mascotas con atención médica preventiva, ética y humana.</p>
+              </div>
+            </article>
 
- <section id="alimentacion">
- <h2>Alimentación Premium</h2>
- <p>
- Comida balanceada y snacks naturales para todas las etapas de vida de tu mascota.
- </p>
- </section>
+            <article class="about-item">
+              <span class="about-item__icon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+              </span>
+              <div>
+                <h3>Visión</h3>
+                <p>Ser la clínica veterinaria referente por calidad médica, innovación y confianza.</p>
+              </div>
+            </article>
 
- <section id="juguetes">
- <h2>Juguetes Interactivos</h2>
- <p>
- Diversión y estimulación mental para mantener a tu mascota feliz y activa.
- </p>
- </section>
+            <article class="about-item">
+              <span class="about-item__icon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-8-4.8-8-11a5 5 0 0 1 8-4 5 5 0 0 1 8 4c0 6.2-8 11-8 11Z"/></svg>
+              </span>
+              <div>
+                <h3>Valores</h3>
+                <p>Compasión, transparencia, responsabilidad, actualización médica y respeto animal.</p>
+              </div>
+            </article>
+          </div>
+        </div>
 
- <section id="accesorios">
- <h2>Accesorios Esenciales</h2>
- <p>
- Collares, camas, transportadores y todo lo necesario para su bienestar.
- </p>
- </section>
+        <figure class="about__media">
+          <img
+            src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=900&q=80"
+            alt="Veterinaria revisando a un perro en consulta"
+            loading="lazy"
+          />
+        </figure>
+      </div>
+    </section>
 
- <section id="salud">
- <h2>Productos de Salud</h2>
- <p>
- Suplementos, higiene y cuidados especiales para una vida larga y saludable.
- </p>
- </section>
+    <!-- Servicios -->
+    <section class="section" id="servicios" aria-labelledby="services-title">
+      <div class="container">
+        <p class="section__eyebrow">Nuestros servicios</p>
+        <h2 class="section__title" id="services-title">Atención completa en cada etapa de vida</h2>
+        <p class="section__intro">
+          Servicios pensados para prevenir, diagnosticar, tratar y mejorar la calidad de vida de tu mascota.
+        </p>
 
- </main>
+        <div class="grid services__grid">
+          <article class="service-card">
+            <span class="service-card__icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 2v20M5 5l14 14M19 5 5 19"/><circle cx="12" cy="12" r="9"/></svg>
+            </span>
+            <h3>Medicina Preventiva</h3>
+            <p>Vacunación, desparasitación, controles anuales y planes de salud personalizados.</p>
+            <a class="service-card__link" href="#contacto">Más info <span aria-hidden="true">→</span></a>
+          </article>
 
- <footer>
- <p>© 2026 PetStore</p>
- </footer>
+          <article class="service-card">
+            <span class="service-card__icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><path d="m14.5 4.5 5 5L8 21H3v-5L14.5 4.5Z"/><path d="m13 6 5 5"/></svg>
+            </span>
+            <h3>Cirugía</h3>
+            <p>Procedimientos programados con protocolos anestésicos seguros y monitoreo constante.</p>
+            <a class="service-card__link" href="#contacto">Más info <span aria-hidden="true">→</span></a>
+          </article>
 
- </div>
+          <article class="service-card">
+            <span class="service-card__icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M7 3c2 0 3 2 5 2s3-2 5-2c3 0 4 3 4 6 0 6-4 12-6 12-1.5 0-1.5-4-3-4s-1.5 4-3 4c-2 0-6-6-6-12 0-3 1-6 4-6Z"/></svg>
+            </span>
+            <h3>Odontología Veterinaria</h3>
+            <p>Limpieza dental, evaluación oral, prevención de sarro y cuidado periodontal.</p>
+            <a class="service-card__link" href="#contacto">Más info <span aria-hidden="true">→</span></a>
+          </article>
 
- <!-- SCRIPT -->
- <script type="module" src="script.js"></script>
+          <article class="service-card">
+            <span class="service-card__icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M4 14c4-5 12-5 16 0"/><path d="M6 17h12"/><path d="M8 20h8"/><circle cx="8" cy="8" r="2"/><circle cx="16" cy="8" r="2"/></svg>
+            </span>
+            <h3>Peluquería y Spa</h3>
+            <p>Baños medicados, cortes, limpieza de oídos, uñas y tratamientos de bienestar.</p>
+            <a class="service-card__link" href="#contacto">Más info <span aria-hidden="true">→</span></a>
+          </article>
+        </div>
+      </div>
+    </section>
 
+    <!-- Equipo -->
+    <section class="section section--soft" id="equipo" aria-labelledby="team-title">
+      <div class="container">
+        <p class="section__eyebrow">Nuestro equipo</p>
+        <h2 class="section__title" id="team-title">Profesionales dedicados al cuidado animal</h2>
+        <p class="section__intro">
+          Un equipo multidisciplinario preparado para acompañarte con comunicación clara y trato amable.
+        </p>
+
+        <div class="grid team__grid">
+          <article class="team-card">
+            <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=700&q=80" alt="Dra. Laura Méndez, médica veterinaria" loading="lazy" />
+            <div class="team-card__body">
+              <h3>Dra. Laura Méndez</h3>
+              <p class="team-card__role">Medicina interna</p>
+              <p>Especialista en diagnóstico clínico, prevención y manejo integral de pacientes adultos.</p>
+            </div>
+          </article>
+
+          <article class="team-card">
+            <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=700&q=80" alt="Dr. Andrés Rojas, cirujano veterinario" loading="lazy" />
+            <div class="team-card__body">
+              <h3>Dr. Andrés Rojas</h3>
+              <p class="team-card__role">Cirugía y anestesia</p>
+              <p>Encargado de procedimientos quirúrgicos, control del dolor y recuperación postoperatoria.</p>
+            </div>
+          </article>
+
+          <article class="team-card">
+            <img src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=700&q=80" alt="Dra. Camila Torres, odontóloga veterinaria" loading="lazy" />
+            <div class="team-card__body">
+              <h3>Dra. Camila Torres</h3>
+              <p class="team-card__role">Odontología</p>
+              <p>Prevención y tratamiento de enfermedades orales para mejorar salud y comodidad.</p>
+            </div>
+          </article>
+
+          <article class="team-card">
+            <img src="https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=700&q=80" alt="Sofía Vargas, groomer profesional" loading="lazy" />
+            <div class="team-card__body">
+              <h3>Sofía Vargas</h3>
+              <p class="team-card__role">Grooming y spa</p>
+              <p>Experta en estética, manejo amable y rutinas de higiene para perros y gatos.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Carrusel de testimonios -->
+    <section class="section" id="testimonios" aria-labelledby="testimonials-title">
+      <div class="container">
+        <p class="section__eyebrow">Testimonios</p>
+        <h2 class="section__title" id="testimonials-title">Familias que confían en VetCare</h2>
+        <p class="section__intro">
+          Opiniones reales de tutores que nos eligen para cuidar la salud de sus mascotas.
+        </p>
+
+        <div class="testimonials__shell" aria-roledescription="carrusel">
+          <div class="carousel" id="testimonial-track">
+            <article class="testimonial" aria-label="Testimonio 1 de 4">
+              <div class="testimonial__inner">
+                <div class="testimonial__header">
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=80" alt="Foto de Mariana López" loading="lazy" />
+                  <div>
+                    <h3>Mariana López</h3>
+                    <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
+                  </div>
+                </div>
+                <blockquote>“El equipo explicó cada paso del tratamiento de Luna y siempre nos sentimos acompañados.”</blockquote>
+              </div>
+            </article>
+
+            <article class="testimonial" aria-label="Testimonio 2 de 4">
+              <div class="testimonial__inner">
+                <div class="testimonial__header">
+                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=80" alt="Foto de Diego Salazar" loading="lazy" />
+                  <div>
+                    <h3>Diego Salazar</h3>
+                    <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
+                  </div>
+                </div>
+                <blockquote>“La cirugía de Bruno fue impecable. Recibimos seguimiento antes, durante y después.”</blockquote>
+              </div>
+            </article>
+
+            <article class="testimonial" aria-label="Testimonio 3 de 4">
+              <div class="testimonial__inner">
+                <div class="testimonial__header">
+                  <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=160&q=80" alt="Foto de Patricia Núñez" loading="lazy" />
+                  <div>
+                    <h3>Patricia Núñez</h3>
+                    <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
+                  </div>
+                </div>
+                <blockquote>“Mi gato suele estresarse, pero aquí lo trataron con paciencia y mucho cuidado.”</blockquote>
+              </div>
+            </article>
+
+            <article class="testimonial" aria-label="Testimonio 4 de 4">
+              <div class="testimonial__inner">
+                <div class="testimonial__header">
+                  <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=160&q=80" alt="Foto de Rafael Castro" loading="lazy" />
+                  <div>
+                    <h3>Rafael Castro</h3>
+                    <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
+                  </div>
+                </div>
+                <blockquote>“Excelente atención preventiva. Ahora tenemos un plan claro para mantener a Nala sana.”</blockquote>
+              </div>
+            </article>
+          </div>
+
+          <div class="carousel__controls" aria-label="Controles del carrusel">
+            <button class="carousel__button" type="button" id="prev-testimonial" aria-label="Testimonio anterior">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <div class="carousel__dots" id="testimonial-dots" aria-label="Indicadores del carrusel"></div>
+            <button class="carousel__button" type="button" id="next-testimonial" aria-label="Siguiente testimonio">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Preguntas frecuentes -->
+    <section class="section section--soft" id="faq" aria-labelledby="faq-title">
+      <div class="container">
+        <p class="section__eyebrow">FAQ</p>
+        <h2 class="section__title" id="faq-title">Preguntas frecuentes</h2>
+        <p class="section__intro">
+          Respuestas rápidas para ayudarte a preparar la visita de tu mascota.
+        </p>
+
+        <div class="faq__list">
+          <article class="faq__item">
+            <h3>
+              <button class="faq__trigger" type="button" aria-expanded="false" aria-controls="faq-1">
+                ¿Cada cuánto debo llevar a mi mascota al veterinario?
+                <span class="faq__icon" aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div class="faq__panel" id="faq-1" role="region">
+              <div class="faq__panel-inner">
+                <p>Recomendamos un control preventivo al menos una vez al año. Cachorros, pacientes senior o mascotas con enfermedades crónicas pueden requerir visitas más frecuentes.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="faq__item">
+            <h3>
+              <button class="faq__trigger" type="button" aria-expanded="false" aria-controls="faq-2">
+                ¿Qué vacunas necesita mi perro o gato?
+                <span class="faq__icon" aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div class="faq__panel" id="faq-2" role="region">
+              <div class="faq__panel-inner">
+                <p>Depende de edad, especie, estilo de vida y riesgos de exposición. En consulta diseñamos un calendario de vacunación personalizado y seguro.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="faq__item">
+            <h3>
+              <button class="faq__trigger" type="button" aria-expanded="false" aria-controls="faq-3">
+                ¿Atienden emergencias?
+                <span class="faq__icon" aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div class="faq__panel" id="faq-3" role="region">
+              <div class="faq__panel-inner">
+                <p>Atendemos urgencias dentro del horario de clínica. Para casos críticos, llámanos antes de venir para activar el protocolo de recepción.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="faq__item">
+            <h3>
+              <button class="faq__trigger" type="button" aria-expanded="false" aria-controls="faq-4">
+                ¿Cómo preparo a mi mascota para una cirugía?
+                <span class="faq__icon" aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div class="faq__panel" id="faq-4" role="region">
+              <div class="faq__panel-inner">
+                <p>Solicitamos evaluación previa, exámenes según el caso y ayuno indicado por el veterinario. El equipo te entrega instrucciones específicas antes del procedimiento.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="faq__item">
+            <h3>
+              <button class="faq__trigger" type="button" aria-expanded="false" aria-controls="faq-5">
+                ¿Puedo agendar peluquería y consulta el mismo día?
+                <span class="faq__icon" aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div class="faq__panel" id="faq-5" role="region">
+              <div class="faq__panel-inner">
+                <p>Sí, podemos coordinar ambos servicios según disponibilidad. Indica tus preferencias al solicitar la cita para organizar mejor el horario.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contacto con formulario validado -->
+    <section class="section" id="contacto" aria-labelledby="contact-title">
+      <div class="container">
+        <p class="section__eyebrow">Contacto</p>
+        <h2 class="section__title" id="contact-title">Agenda una visita</h2>
+        <p class="section__intro">
+          Cuéntanos qué necesita tu mascota y te contactaremos para confirmar la cita.
+        </p>
+
+        <div class="contact__layout">
+          <aside class="contact-card" aria-label="Información de contacto">
+            <h3>Datos de la clínica</h3>
+            <p>Estamos listos para orientarte antes, durante y después de cada consulta.</p>
+            <ul class="contact-list">
+              <li>
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 12-9 12S3 17 3 10a9 9 0 1 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span><strong>Dirección:</strong><br />Av. Los Jardines 245, Lima</span>
+              </li>
+              <li>
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.77.6 2.6a2 2 0 0 1-.45 2.11L8 9.69a16 16 0 0 0 6.31 6.31l1.26-1.26a2 2 0 0 1 2.11-.45c.83.28 1.7.48 2.6.6A2 2 0 0 1 22 16.92Z"/></svg>
+                <span><strong>Teléfono:</strong><br /><a href="tel:+5115550123">+51 1 555 0123</a></span>
+              </li>
+              <li>
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="m22 6-10 7L2 6"/></svg>
+                <span><strong>Email:</strong><br /><a href="mailto:hola@vetcare.com">hola@vetcare.com</a></span>
+              </li>
+              <li>
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                <span><strong>Horario:</strong><br />Lunes a sábado, 8:00 a. m. - 7:00 p. m.</span>
+              </li>
+            </ul>
+          </aside>
+
+          <form class="contact-form" id="contact-form" novalidate>
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="name">Nombre</label>
+                <input id="name" name="name" type="text" autocomplete="name" required />
+                <span class="form-error" id="name-error" aria-live="polite"></span>
+              </div>
+
+              <div class="form-field">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" autocomplete="email" required />
+                <span class="form-error" id="email-error" aria-live="polite"></span>
+              </div>
+
+              <div class="form-field">
+                <label for="phone">Teléfono</label>
+                <input id="phone" name="phone" type="tel" autocomplete="tel" required />
+                <span class="form-error" id="phone-error" aria-live="polite"></span>
+              </div>
+
+              <div class="form-field">
+                <label for="reason">Motivo de consulta</label>
+                <select id="reason" name="reason" required>
+                  <option value="">Selecciona una opción</option>
+                  <option value="preventiva">Medicina preventiva</option>
+                  <option value="cirugia">Cirugía</option>
+                  <option value="odontologia">Odontología veterinaria</option>
+                  <option value="peluqueria">Peluquería y spa</option>
+                  <option value="otro">Otro</option>
+                </select>
+                <span class="form-error" id="reason-error" aria-live="polite"></span>
+              </div>
+
+              <div class="form-field form-field--full">
+                <label for="message">Mensaje</label>
+                <textarea id="message" name="message" required minlength="10"></textarea>
+                <span class="form-error" id="message-error" aria-live="polite"></span>
+              </div>
+            </div>
+
+            <button class="btn btn--primary" type="submit">Enviar</button>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer con contacto, redes y aviso legal -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <h2 class="footer__title">VetCare Clínica Veterinaria</h2>
+          <p class="footer__text">
+            Cuidado médico, preventivo y estético para mascotas con atención profesional y cercana.
+          </p>
+          <div class="socials" aria-label="Redes sociales">
+            <a class="social-link" href="#" aria-label="Facebook">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3Z"/></svg>
+            </a>
+            <a class="social-link" href="#" aria-label="Instagram">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>
+            </a>
+            <a class="social-link" href="#" aria-label="WhatsApp">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5Z"/><path d="M9 8.5c.2 3 2.3 5.1 5.5 5.8"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="footer__title">Contacto</h2>
+          <ul class="footer__list">
+            <li>Av. Los Jardines 245, Lima</li>
+            <li><a href="tel:+5115550123">+51 1 555 0123</a></li>
+            <li><a href="mailto:hola@vetcare.com">hola@vetcare.com</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="footer__title">Enlaces</h2>
+          <ul class="footer__list">
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#equipo">Equipo</a></li>
+            <li><a href="#faq">Preguntas frecuentes</a></li>
+            <li><a href="#contacto">Solicitar cita</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p>© 2026 VetCare Clínica Veterinaria. Información referencial; no reemplaza una evaluación médica veterinaria presencial.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* =========================
+       Menú móvil
+    ========================= */
+    const navToggle = document.querySelector(".nav__toggle");
+    const navMenu = document.querySelector("#nav-menu");
+
+    navToggle.addEventListener("click", () => {
+      const isOpen = navMenu.classList.toggle("is-open");
+      navToggle.setAttribute("aria-expanded", String(isOpen));
+      navToggle.setAttribute("aria-label", isOpen ? "Cerrar menú" : "Abrir menú");
+    });
+
+    navMenu.addEventListener("click", (event) => {
+      if (event.target.matches("a")) {
+        navMenu.classList.remove("is-open");
+        navToggle.setAttribute("aria-expanded", "false");
+        navToggle.setAttribute("aria-label", "Abrir menú");
+      }
+    });
+
+    /* =========================
+       Carrusel de testimonios
+    ========================= */
+    const track = document.querySelector("#testimonial-track");
+    const slides = Array.from(track.children);
+    const prevButton = document.querySelector("#prev-testimonial");
+    const nextButton = document.querySelector("#next-testimonial");
+    const dotsContainer = document.querySelector("#testimonial-dots");
+    let currentSlide = 0;
+
+    slides.forEach((_, index) => {
+      const dot = document.createElement("button");
+      dot.className = "carousel__dot";
+      dot.type = "button";
+      dot.setAttribute("aria-label", `Ir al testimonio ${index + 1}`);
+      dot.addEventListener("click", () => goToSlide(index));
+      dotsContainer.appendChild(dot);
+    });
+
+    const dots = Array.from(dotsContainer.children);
+
+    function getVisibleSlides() {
+      if (window.matchMedia("(min-width: 1024px)").matches) return 3;
+      if (window.matchMedia("(min-width: 768px)").matches) return 2;
+      return 1;
+    }
+
+    function updateCarousel() {
+      const visibleSlides = getVisibleSlides();
+      const maxIndex = Math.max(slides.length - visibleSlides, 0);
+      currentSlide = Math.min(currentSlide, maxIndex);
+      const slideWidth = slides[0].getBoundingClientRect().width;
+      track.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+
+      dots.forEach((dot, index) => {
+        dot.setAttribute("aria-current", String(index === currentSlide));
+      });
+
+      prevButton.disabled = currentSlide === 0;
+      nextButton.disabled = currentSlide === maxIndex;
+    }
+
+    function goToSlide(index) {
+      const maxIndex = Math.max(slides.length - getVisibleSlides(), 0);
+      currentSlide = Math.max(0, Math.min(index, maxIndex));
+      updateCarousel();
+    }
+
+    prevButton.addEventListener("click", () => goToSlide(currentSlide - 1));
+    nextButton.addEventListener("click", () => goToSlide(currentSlide + 1));
+    window.addEventListener("resize", updateCarousel);
+    updateCarousel();
+
+    /* =========================
+       Acordeón FAQ
+    ========================= */
+    document.querySelectorAll(".faq__trigger").forEach((trigger) => {
+      trigger.addEventListener("click", () => {
+        const panel = document.querySelector(`#${trigger.getAttribute("aria-controls")}`);
+        const isExpanded = trigger.getAttribute("aria-expanded") === "true";
+
+        document.querySelectorAll(".faq__trigger").forEach((button) => {
+          button.setAttribute("aria-expanded", "false");
+        });
+        document.querySelectorAll(".faq__panel").forEach((item) => {
+          item.classList.remove("is-open");
+        });
+
+        if (!isExpanded) {
+          trigger.setAttribute("aria-expanded", "true");
+          panel.classList.add("is-open");
+        }
+      });
+    });
+
+    /* =========================
+       Validación del formulario
+    ========================= */
+    const form = document.querySelector("#contact-form");
+    const status = document.querySelector("#form-status");
+
+    const validators = {
+      name: (value) => value.trim().length >= 2 || "Ingresa tu nombre.",
+      email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "Ingresa un email válido.",
+      phone: (value) => /^[0-9+\s()-]{7,}$/.test(value.trim()) || "Ingresa un teléfono válido.",
+      reason: (value) => Boolean(value) || "Selecciona un motivo.",
+      message: (value) => value.trim().length >= 10 || "Escribe un mensaje de al menos 10 caracteres."
+    };
+
+    function setError(field, message) {
+      const input = form.elements[field];
+      const error = document.querySelector(`#${field}-error`);
+      error.textContent = message || "";
+      input.setAttribute("aria-invalid", message ? "true" : "false");
+    }
+
+    function validateField(field) {
+      const input = form.elements[field];
+      const result = validators[field](input.value);
+      const message = result === true ? "" : result;
+      setError(field, message);
+      return !message;
+    }
+
+    Object.keys(validators).forEach((field) => {
+      form.elements[field].addEventListener("blur", () => validateField(field));
+      form.elements[field].addEventListener("input", () => {
+        if (form.elements[field].getAttribute("aria-invalid") === "true") {
+          validateField(field);
+        }
+      });
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      status.textContent = "";
+      const isValid = Object.keys(validators).every(validateField);
+
+      if (!isValid) {
+        status.textContent = "Revisa los campos marcados antes de enviar.";
+        return;
+      }
+
+      status.textContent = "Solicitud enviada. Te contactaremos pronto para confirmar la cita.";
+      form.reset();
+      Object.keys(validators).forEach((field) => setError(field, ""));
+    });
+  </script>
 </body>
 </html>

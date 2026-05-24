@@ -1,47 +1,82 @@
-// Wait for Three.js to load
-if (typeof THREE === 'undefined') {
-    console.error('Three.js failed to load');
-    // Fallback to simple content
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('container').innerHTML = '<h1 style="color: white; text-align: center; padding-top: 20%;">PetStore Landing Page</h1><p style="color: #aaa; text-align: center;">Simple landing page for pet store</p>';
-    });
-} else {
-    // Three.js scene
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x111111);
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
+// Three.js escena mejorada
+let scene, camera, renderer, particles;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+function init() {
+    // Crear escena
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000000);
+
+    // Cámara
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 30;
+
+    // Renderer
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    document.getElementById('container').appendChild(renderer.domElement);
+    document.getElementById('threejs-container').appendChild(renderer.domElement);
 
-    // Add a simple rotating cube (representing a pet toy or product)
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshStandardMaterial({ color: 0xff6b6b, metalness: 0.2, roughness: 0.5 });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
-
-    // Add lighting
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(5, 5, 5);
-    scene.add(light);
-    const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+    // Luz ambiental
+    const ambientLight = new THREE.AmbientLight(0x404040, 2);
     scene.add(ambientLight);
 
-    // Animation loop
-    function animate() {
-        requestAnimationFrame(animate);
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-        renderer.render(scene, camera);
-    }
+    // Luz direccional
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(5, 5, 5);
+    scene.add(directionalLight);
+
+    // Crear partículas flotantes (como en ChaingPT)
+    createParticles();
+
+    // Animar
     animate();
 
-    // Handle window resize
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
+    // Manejar redimensionamiento
+    window.addEventListener('resize', onWindowResize, false);
 }
+
+function createParticles() {
+    // Geometría para partículas
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 1500;
+
+    const posArray = new Float32Array(particlesCount * 3);
+
+    for (let i = 0; i < particlesCount * 3; i++) {
+        // Posiciones aleatorias en un espacio 3D
+        posArray[i] = (Math.random() - 0.5) * 100;
+    }
+
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+    // Material de partículas
+    const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.005,
+        color: 0x4fc3f7,
+        transparent: true,
+        opacity: 0.6
+    });
+
+    // Crear el sistema de partículas
+    particles = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particles);
+}
+
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+
+    // Rotar ligeramente las partículas
+    if (particles) {
+        particles.rotation.y += 0.0005;
+    }
+
+    renderer.render(scene, camera);
+}
+
+// Inicializar cuando cargue la página
+window.addEventListener('load', init);

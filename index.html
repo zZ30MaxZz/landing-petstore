@@ -1,36 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetStore Landing</title>
+    <title>PetStore - Tienda para Mascotas</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+    <div id="threejs-container"></div>
+    <div class="content-overlay">
         <header>
             <h1>PetStore</h1>
-            <p>Todo para tus mascotas</p>
+            <p>Todo lo que tu mascota necesita</p>
         </header>
+        <nav>
+            <ul>
+                <li><a href="#alimentacion">Alimentación</a></li>
+                <li><a href="#juguetes">Juguetes</a></li>
+                <li><a href="#accesorios">Accesorios</a></li>
+                <li><a href="#salud">Salud</a></li>
+            </ul>
+        </nav>
         <main>
-            <section class="features">
-                <div class="feature">
-                    <h2>Alimentación</h2>
-                    <p>Comida balanceada y snacks para todas las etapas de vida</p>
-                </div>
-                <div class="feature">
-                    <h2>Juguetes</h2>
-                    <p>Diversión y ejercicio para mantener a tu mascota activa</p>
-                </div>
-                <div class="feature">
-                    <h2>Accesorios</h2>
-                    <p>Collares, camas y todo lo necesario para su comodidad</p>
-                </div>
+            <section id="alimentacion">
+                <h2>Alimentación Premium</h2>
+                <p>Comida balanceada y snacks naturales para todas las etapas de vida de tu mascota.</p>
+            </section>
+            <section id="juguetes">
+                <h2>Juguetes Interactivos</h2>
+                <p>Diversión y estimulación mental para mantener a tu mascota feliz y activa.</p>
+            </section>
+            <section id="accesorios">
+                <h2>Accesorios Esenciales</h2>
+                <p>Collares, camas, transportadores y todo lo necesario para su bienestar.</p>
+            </section>
+            <section id="salud">
+                <h2>Productos de Salud</h2>
+                <p>Suplementos, higiene y cuidados especiales para una vida larga y saludable.</p>
             </section>
         </main>
         <footer>
-            <p>&copy; 2026 PetStore. Todos los derechos reservados.</p>
+            <p>&copy; 2026 PetStore. Hecho con pasión por los animales.</p>
         </footer>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r160/three.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
